@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae6e8907c0cb9494dab107f3a946ed17, type: 3}
   m_Name: BulletData
   m_EditorClassIdentifier: 
-  speed: 500
+  speed: 100
   damage: 1
   impactPrefab: {fileID: 0}

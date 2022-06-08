@@ -21,6 +21,10 @@ public class Weapon : MonoBehaviour
     {
         _currentVec = transform.localPosition;
     }
+    private void Start()
+    {
+
+    }
     private void Update()
     {
         
@@ -32,9 +36,11 @@ public class Weapon : MonoBehaviour
         {
             _isFire = true;
             StartCoroutine(WaitForFireBullet(_weaponDataSO.fireRate));
-            Bullet bullet = Instantiate(_bulletPrefab, _fireTrm.position, Quaternion.identity).GetComponent<Bullet>() as Bullet;          
-
+            Bullet bullet = Instantiate(_bulletPrefab, _fireTrm.position, Quaternion.identity).GetComponent<Bullet>() as Bullet;
             bullet.gameObject.SetActive(true);
+
+            GameObject impact = Instantiate(_weaponDataSO.muzzleImpact, _fireTrm.position, Quaternion.identity);
+
         }
         
     }

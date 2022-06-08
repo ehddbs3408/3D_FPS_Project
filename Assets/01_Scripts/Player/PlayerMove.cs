@@ -5,6 +5,12 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
+    [SerializeField]
+    private PlayerStateDataSO _playerDataSO;
+
+    [SerializeField]
+    private KeyCode keyCodeRun = KeyCode.LeftShift;
+
     private RotateToMoues _rotateToMouse;
     private PlayerCtr _movement;
 
@@ -28,6 +34,15 @@ public class PlayerMove : MonoBehaviour
         float x = Input.GetAxisRaw("Horizontal");
         float z = Input.GetAxisRaw("Vertical");
 
+        if (x != 0 || z != 0)
+        {
+            bool isRun = false;
+
+            if (z > 0) isRun = Input.GetKey(keyCodeRun);
+
+            _movement.MoveSpeed = isRun == true ? _playerDataSO.runSpeed : _playerDataSO.walkSpeed;
+        }
+
         _movement.MoveTo(new Vector3(x, 0, z));
     }
 
@@ -37,5 +52,7 @@ public class PlayerMove : MonoBehaviour
         float mouseY = Input.GetAxis("Mouse Y");
 
         _rotateToMouse.UpdateRotate(mouseY, mouseX);
+
+
     }
 }

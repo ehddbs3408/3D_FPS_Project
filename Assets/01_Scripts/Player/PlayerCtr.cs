@@ -9,8 +9,14 @@ public class PlayerCtr : MonoBehaviour
     private float moveSpeed;
     private Vector3 moveForce;
 
-    private CharacterController _characyerController;
+    public float MoveSpeed
+    {
+        get => moveSpeed;
+        set => moveSpeed = Mathf.Max(0, value);
+    }
 
+    private CharacterController _characyerController;
+     
     private void Awake()
     {
         _characyerController = GetComponent<CharacterController>();

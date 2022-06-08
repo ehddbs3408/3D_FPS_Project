@@ -9,4 +9,6 @@ public class WeaponDataSO : ScriptableObject
     public float aimRate = 1f;
     public float recoil = 3f;
 
+    public GameObject muzzleImpact;
+
 }
