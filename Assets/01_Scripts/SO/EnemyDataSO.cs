@@ -6,5 +6,8 @@ using UnityEngine;
 public class EnemyDataSO : ScriptableObject
 {
     public float speed;
+    public int health = 2;
+
+    public GameObject explosionImpact;
 
 }

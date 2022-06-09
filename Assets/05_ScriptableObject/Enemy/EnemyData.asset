@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d11b848fd7c72845b4075cfa874583d, type: 3}
   m_Name: EnemyData
   m_EditorClassIdentifier: 
-  speed: 2
+  speed: 4
+  health: 2
+  explosionImpact: {fileID: 8746206903446403329, guid: 7300cabdd7769584387ed2d4b24773fd, type: 3}

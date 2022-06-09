@@ -24,11 +24,13 @@ public class PlayerCtr : MonoBehaviour
     private void Update()
     {
         _characyerController.Move(moveForce * Time.deltaTime);
+
     }
     public void MoveTo(Vector3 direction)
     {
         direction = transform.rotation * new Vector3(direction.x, 0, direction.z);
 
         moveForce = new Vector3(direction.x * moveSpeed, moveForce.y, direction.z * moveSpeed);
+        moveForce += Physics.gravity;
     }
 }

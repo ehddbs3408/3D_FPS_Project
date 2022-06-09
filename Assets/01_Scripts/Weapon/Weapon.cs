@@ -21,25 +21,21 @@ public class Weapon : MonoBehaviour
     {
         _currentVec = transform.localPosition;
     }
-    private void Start()
-    {
-
-    }
-    private void Update()
-    {
-        
-    }
     public void Fire()
     {
         Sequence seq = DOTween.Sequence();
         if (!_isFire)
         {
             _isFire = true;
+
             StartCoroutine(WaitForFireBullet(_weaponDataSO.fireRate));
-            Bullet bullet = Instantiate(_bulletPrefab, _fireTrm.position, Quaternion.identity).GetComponent<Bullet>() as Bullet;
+            Bullet bullet = PoolManager.Instance.Pop("bullet") as Bullet;
+            bullet.transform.position = _fireTrm.position;
             bullet.gameObject.SetActive(true);
+            bullet.SetInit();
 
             GameObject impact = Instantiate(_weaponDataSO.muzzleImpact, _fireTrm.position, Quaternion.identity);
+            impact.transform.SetParent(_fireTrm);
 
         }
         
