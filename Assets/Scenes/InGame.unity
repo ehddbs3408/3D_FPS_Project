@@ -159,6 +159,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 3
+  _jumpForce: 10
+  gravity: -20
 --- !u!23 &311394994
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -269,13 +271,43 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  <OnFireButtonKeyPress>k__BackingField:
+  <OnFireKeyPress>k__BackingField:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1357253323}
         m_TargetAssemblyTypeName: Weapon, Assembly-CSharp
         m_MethodName: Fire
         m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  <OnReloadKeyPress>k__BackingField:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1357253323}
+        m_TargetAssemblyTypeName: Weapon, Assembly-CSharp
+        m_MethodName: ReloadWeapon
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  <OnRecoilKeyPress>k__BackingField:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 311395000}
+        m_TargetAssemblyTypeName: RotateToMoues, Assembly-CSharp
+        m_MethodName: CameraRecoil
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -298,6 +330,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerDataSO: {fileID: 11400000, guid: a468b6c6ed0f4e14b9037e57df01f1e7, type: 2}
   keyCodeRun: 304
+  keyCodeJump: 32
 --- !u!114 &311395000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -311,7 +344,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotCamXAxisSpeed: 5
+  rotCamXAimAxisSpeed: 3
   rotCamYAxisSpeed: 3
+  rotCamYAimAxisSpeed: 2
 --- !u!1 &499729463
 GameObject:
   m_ObjectHideFlags: 0
@@ -1087,7 +1122,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1193855416
 MonoBehaviour:
   m_ObjectHideFlags: 0

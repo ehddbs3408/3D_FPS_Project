@@ -10,6 +10,8 @@ public class PlayerMove : MonoBehaviour
 
     [SerializeField]
     private KeyCode keyCodeRun = KeyCode.LeftShift;
+    [SerializeField]
+    private KeyCode keyCodeJump = KeyCode.Space;
 
     private RotateToMoues _rotateToMouse;
     private PlayerCtr _movement;
@@ -27,7 +29,10 @@ public class PlayerMove : MonoBehaviour
     {
         UpdateRotate();
         UpdateMove();
+        UpdateJump();
     }
+
+
 
     private void UpdateMove()
     {
@@ -54,5 +59,12 @@ public class PlayerMove : MonoBehaviour
         _rotateToMouse.UpdateRotate(mouseY, mouseX);
 
 
+    }
+    private void UpdateJump()
+    {
+        if(Input.GetKeyDown(keyCodeJump))
+        {
+            _movement.Jump();
+        }
     }
 }

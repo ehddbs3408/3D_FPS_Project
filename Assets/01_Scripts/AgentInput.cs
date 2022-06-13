@@ -9,19 +9,27 @@ public class AgentInput : MonoBehaviour
     [field: SerializeField]
     public UnityEvent<bool> OnClickMouseRBtn { get; set; }
     [field:SerializeField]
-    public UnityEvent OnFireButtonKeyPress { get; set; }
+    public UnityEvent OnFireKeyPress { get; set; }
+    [field:SerializeField]
+    public UnityEvent OnReloadKeyPress { get; set; }
+    [field: SerializeField]
+    public UnityEvent<bool> OnRecoilKeyPress { get; set; }
 
     private void Update()
     {
         OnClickAimBtn();
-        OnFireButton();
+        OnFireInput();
+        OnReloadInput();
+        OnRecoilInput();
     }
 
-    private void OnFireButton()
+    
+
+    private void OnFireInput()
     {
         if(Input.GetMouseButton(0))
         {
-            OnFireButtonKeyPress?.Invoke();
+            OnFireKeyPress?.Invoke();
         }
     }
 
@@ -34,6 +42,24 @@ public class AgentInput : MonoBehaviour
         else if(Input.GetMouseButtonUp(1))
         {
             OnClickMouseRBtn?.Invoke(false);
+        }
+    }
+    private void OnReloadInput()
+    {
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            OnReloadKeyPress?.Invoke(); 
+        }
+    }
+    private void OnRecoilInput()
+    {
+        if (Input.GetMouseButton(0))
+        {
+            OnRecoilKeyPress?.Invoke(true);
+        }
+        else
+        {
+            OnRecoilKeyPress?.Invoke(false);
         }
     }
 }

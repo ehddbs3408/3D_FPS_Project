@@ -13,18 +13,31 @@ public class Weapon : MonoBehaviour
     [SerializeField]
     private GameObject _bulletPrefab;
 
+    private Animator _animator;
+    private readonly int _aimHashStr = Animator.StringToHash("IsAim");
+    private readonly int _reloadHashStr = Animator.StringToHash("Reload");
+
     private Vector3 _currentVec;
 
     private bool _isAimWeapon;
+    public bool IsAimWepaon
+    {
+        get => _isAimWeapon;
+    }
+    private bool _isReload;
+    public bool IsReload
+    {
+        get => _isReload;
+    }
     private bool _isFire;
     private void Awake()
     {
+        _animator = GetComponent<Animator>();
         _currentVec = transform.localPosition;
     }
     public void Fire()
     {
-        Sequence seq = DOTween.Sequence();
-        if (!_isFire)
+        if (!_isFire&&_isReload==false)
         {
             _isFire = true;
 
@@ -49,20 +62,30 @@ public class Weapon : MonoBehaviour
 
     public void AimWaepon(bool value)
     {
+
         _isAimWeapon = value;
-        DOTween.Kill(this);
-        Sequence seq = DOTween.Sequence();
-        if (_isAimWeapon)
+        if (value)
         {
-            seq.Append(transform.DOLocalMoveX(_currentVec.x + -0.3f, _weaponDataSO.aimRate));
+            _animator.SetBool(_aimHashStr, true);
         }
         else
         {
-            seq.Append(transform.DOLocalMoveX(_currentVec.x, _weaponDataSO.aimRate));
 
+            _animator.SetBool(_aimHashStr, false);
         }
+        
     }
+    public void ReloadWeapon()
+    {
+        if (_isReload) return;
+        _isReload = true;
+        _animator.SetTrigger(_reloadHashStr);
 
+    }
+    public void ReloadToEnd()
+    {
+        _isReload = false;
+    }
     private void WeaponRecoil()
     {
 

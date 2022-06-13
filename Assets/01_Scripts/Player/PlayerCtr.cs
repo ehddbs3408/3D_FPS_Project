@@ -9,6 +9,11 @@ public class PlayerCtr : MonoBehaviour
     private float moveSpeed;
     private Vector3 moveForce;
 
+    [SerializeField]
+    private float _jumpForce;
+    [SerializeField]
+    private float gravity;
+
     public float MoveSpeed
     {
         get => moveSpeed;
@@ -23,7 +28,14 @@ public class PlayerCtr : MonoBehaviour
     }
     private void Update()
     {
+        if(!_characyerController.isGrounded)
+        {
+            moveForce.y += gravity * Time.deltaTime;
+        }
+
+
         _characyerController.Move(moveForce * Time.deltaTime);
+        Debug.Log(moveForce);
 
     }
     public void MoveTo(Vector3 direction)
@@ -31,6 +43,13 @@ public class PlayerCtr : MonoBehaviour
         direction = transform.rotation * new Vector3(direction.x, 0, direction.z);
 
         moveForce = new Vector3(direction.x * moveSpeed, moveForce.y, direction.z * moveSpeed);
-        moveForce += Physics.gravity;
+    }
+
+    public void Jump()
+    {
+        if(_characyerController.isGrounded)
+        {
+            moveForce.y = _jumpForce;
+        }
     }
 }
