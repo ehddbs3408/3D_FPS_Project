@@ -14,6 +14,8 @@ public class AgentInput : MonoBehaviour
     public UnityEvent OnReloadKeyPress { get; set; }
     [field: SerializeField]
     public UnityEvent<bool> OnRecoilKeyPress { get; set; }
+    [field: SerializeField]
+    public UnityEvent<bool> OnRunKeyPress { get; set; }
 
     private void Update()
     {
@@ -21,9 +23,20 @@ public class AgentInput : MonoBehaviour
         OnFireInput();
         OnReloadInput();
         OnRecoilInput();
+        OnRunInput();
     }
 
-    
+    private void OnRunInput()
+    {
+        if(Input.GetKey(KeyCode.LeftShift))
+        {
+            OnRunKeyPress?.Invoke(true);
+        }
+        else
+        {
+            OnRunKeyPress?.Invoke(false);
+        }
+    }
 
     private void OnFireInput()
     {

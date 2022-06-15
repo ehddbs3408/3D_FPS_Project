@@ -76,8 +76,14 @@ public class Enemy : PoolableMono, IHittalble
 
     }
 
+    private void OnDisable()
+    {
+        StopAllCoroutines();
+    }
     public override void Reset()
     {
         Health = _enemyDataSO.health;
+        _meshRenderer.material.color = Color.white;
+        _isSelfDestruct = false;
     }
 }

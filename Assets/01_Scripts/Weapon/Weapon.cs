@@ -16,6 +16,7 @@ public class Weapon : MonoBehaviour
     private Animator _animator;
     private readonly int _aimHashStr = Animator.StringToHash("IsAim");
     private readonly int _reloadHashStr = Animator.StringToHash("Reload");
+    private readonly int _walkHashStr = Animator.StringToHash("Walk");
 
     private Vector3 _currentVec;
 
@@ -30,6 +31,7 @@ public class Weapon : MonoBehaviour
         get => _isReload;
     }
     private bool _isFire;
+    private bool _isRun;
     private void Awake()
     {
         _animator = GetComponent<Animator>();
@@ -47,9 +49,9 @@ public class Weapon : MonoBehaviour
             bullet.gameObject.SetActive(true);
             bullet.SetInit();
 
-            GameObject impact = Instantiate(_weaponDataSO.muzzleImpact, _fireTrm.position, Quaternion.identity);
+            ImpactParticle impact = PoolManager.Instance.Pop(_weaponDataSO.muzzleImpact.name) as ImpactParticle;
+            impact.transform.position = _fireTrm.position;
             impact.transform.SetParent(_fireTrm);
-
         }
         
     }
@@ -62,10 +64,10 @@ public class Weapon : MonoBehaviour
 
     public void AimWaepon(bool value)
     {
-
         _isAimWeapon = value;
         if (value)
         {
+            Debug.Log("Aim!");
             _animator.SetBool(_aimHashStr, true);
         }
         else
@@ -73,7 +75,18 @@ public class Weapon : MonoBehaviour
 
             _animator.SetBool(_aimHashStr, false);
         }
-        
+    }
+    public void RunWeapon(bool value)
+    {
+        _isRun = value;
+        if(_isRun)
+        {
+            _animator.SetBool(_walkHashStr, true);
+        }
+        else
+        {
+            _animator.SetBool(_aimHashStr, false);
+        }
     }
     public void ReloadWeapon()
     {
