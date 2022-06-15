@@ -21,7 +21,7 @@ public class Enemy : PoolableMono, IHittalble
 
         if(Health <= 0)
         {
-            Destroy(gameObject);
+            PoolManager.Instance.Push(this);
         }
     }
     #endregion
@@ -70,7 +70,8 @@ public class Enemy : PoolableMono, IHittalble
         yield return new WaitForSeconds(0.2f);
         _meshRenderer.material.color = Color.white;
         yield return new WaitForSeconds(0.2f);
-        Instantiate(_enemyDataSO.explosionImpact, transform.position, Quaternion.identity);
+        ImpactParticle impact = PoolManager.Instance.Pop(_enemyDataSO.explosionImpact.name) as ImpactParticle;
+        impact.transform.position = transform.position;
         yield return new WaitForSeconds(0.3f);
         PoolManager.Instance.Push(this);
 

@@ -57,7 +57,7 @@ public class RotateToMoues : MonoBehaviour
 
     public void CameraRecoil(bool value)
     {
-        if(value&&_weapon.IsReload==false)
+        if(value&&_weapon.IsRecoil==false)
         {
             if(_weapon.IsAimWepaon)
             {
@@ -69,15 +69,12 @@ public class RotateToMoues : MonoBehaviour
                 recoilAngleX = Random.Range(30, 40) * Time.deltaTime;
                 recoilAngleY = Random.Range(-0.2f, 0.2f);
             }
-            
-
         }
         else
         {
             recoilAngleX = 0;
             recoilAngleY = 0;
         }
-        
     }
 
     private float ClampAngle(float angle, float min, float max)

@@ -35,7 +35,6 @@ public class PlayerCtr : MonoBehaviour
 
 
         _characyerController.Move(moveForce * Time.deltaTime);
-        Debug.Log(moveForce);
 
     }
     public void MoveTo(Vector3 direction)

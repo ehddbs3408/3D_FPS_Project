@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae6e8907c0cb9494dab107f3a946ed17, type: 3}
-  m_Name: BulletData
+  m_Script: {fileID: 11500000, guid: 08099d738db38084ca867bdd94647e73, type: 3}
+  m_Name: SpawnTable
   m_EditorClassIdentifier: 
-  speed: 70
-  damage: 1
-  impactPrefab: {fileID: 3371290192814205269, guid: 5f92e4c17a64d4e4a8147157a723afd6, type: 3}
+  enemyList:
+  - {fileID: 6479147058429803464, guid: 9c8d71340df760140b87d80a033465cd, type: 3}
+  - {fileID: 5107537100744982957, guid: 235f4c7d5f93aad4ab2f2ad6fe789a39, type: 3}

@@ -18,6 +18,16 @@ public class Weapon : MonoBehaviour
     private readonly int _reloadHashStr = Animator.StringToHash("Reload");
     private readonly int _walkHashStr = Animator.StringToHash("Walk");
 
+    private int _ammo;
+    public int Ammo
+    {
+        get => _ammo;
+        set
+        {
+            _ammo = Mathf.Clamp(value, 0, _weaponDataSO.maxAmmo);
+        }
+    }
+
     private Vector3 _currentVec;
 
     private bool _isAimWeapon;
@@ -25,33 +35,43 @@ public class Weapon : MonoBehaviour
     {
         get => _isAimWeapon;
     }
-    private bool _isReload;
-    public bool IsReload
+    private bool _isRecoil;
+    public bool IsRecoil
     {
-        get => _isReload;
+        get => _isRecoil;
     }
+    private bool _isReload;
     private bool _isFire;
     private bool _isRun;
     private void Awake()
     {
         _animator = GetComponent<Animator>();
         _currentVec = transform.localPosition;
+        Ammo = _weaponDataSO.maxAmmo;
     }
     public void Fire()
     {
-        if (!_isFire&&_isReload==false)
+        if (!_isFire&&_isRecoil==false)
         {
             _isFire = true;
 
-            StartCoroutine(WaitForFireBullet(_weaponDataSO.fireRate));
-            Bullet bullet = PoolManager.Instance.Pop("bullet") as Bullet;
-            bullet.transform.position = _fireTrm.position;
-            bullet.gameObject.SetActive(true);
-            bullet.SetInit();
+            if(Ammo <= 0)
+            {
+                _isRecoil = true;
+            }
+            else
+            {
+                Ammo--;             
+                Bullet bullet = PoolManager.Instance.Pop("bullet") as Bullet;
+                bullet.transform.position = _fireTrm.position;
+                bullet.gameObject.SetActive(true);
+                bullet.SetInit();
 
-            ImpactParticle impact = PoolManager.Instance.Pop(_weaponDataSO.muzzleImpact.name) as ImpactParticle;
-            impact.transform.position = _fireTrm.position;
-            impact.transform.SetParent(_fireTrm);
+                ImpactParticle impact = PoolManager.Instance.Pop(_weaponDataSO.muzzleImpact.name) as ImpactParticle;
+                impact.transform.position = _fireTrm.position;
+                impact.transform.SetParent(_fireTrm);
+            }
+            StartCoroutine(WaitForFireBullet(_weaponDataSO.fireRate));
         }
         
     }
@@ -67,7 +87,6 @@ public class Weapon : MonoBehaviour
         _isAimWeapon = value;
         if (value)
         {
-            Debug.Log("Aim!");
             _animator.SetBool(_aimHashStr, true);
         }
         else
@@ -75,6 +94,7 @@ public class Weapon : MonoBehaviour
 
             _animator.SetBool(_aimHashStr, false);
         }
+        
     }
     public void RunWeapon(bool value)
     {
@@ -85,19 +105,22 @@ public class Weapon : MonoBehaviour
         }
         else
         {
-            _animator.SetBool(_aimHashStr, false);
+            _animator.SetBool(_walkHashStr, false);
         }
     }
     public void ReloadWeapon()
     {
         if (_isReload) return;
+        _isRecoil = true;
         _isReload = true;
+        Ammo = _weaponDataSO.maxAmmo;
         _animator.SetTrigger(_reloadHashStr);
 
     }
     public void ReloadToEnd()
     {
         _isReload = false;
+        _isRecoil = false;
     }
     private void WeaponRecoil()
     {

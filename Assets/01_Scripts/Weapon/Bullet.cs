@@ -41,6 +41,10 @@ public class Bullet : PoolableMono
         {
             IHittalble hit = other.GetComponent<IHittalble>();
             hit.GetHit(1, gameObject);
+
+            ImpactParticle impact = PoolManager.Instance.Pop(_bulletDataSO.impactPrefab.name) as ImpactParticle;
+            impact.transform.position = transform.position;
+
             PoolManager.Instance.Push(this);
         }
     }
