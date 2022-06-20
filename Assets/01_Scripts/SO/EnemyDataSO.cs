@@ -8,6 +8,8 @@ public class EnemyDataSO : ScriptableObject
     public float speed;
     public int health = 2;
 
+    public float attackDelay = 0.5f;
+
     public GameObject explosionImpact;
 
 }

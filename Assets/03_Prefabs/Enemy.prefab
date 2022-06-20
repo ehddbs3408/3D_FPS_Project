@@ -126,3 +126,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyDataSO: {fileID: 11400000, guid: 0b9aaa7083b120f40bb74769a43a9d2a, type: 2}
+  spread: 5
+  flockUpdatesPerSecond: 5
+  sightRadius: 10
