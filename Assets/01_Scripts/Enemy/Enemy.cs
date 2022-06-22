@@ -24,7 +24,10 @@ public class Enemy : PoolableMono, IHittalble
 
     protected Vector3 _direction = Vector3.zero;
     public Vector3 Direction => _direction;
-    #region
+
+    #region Flocking
+    protected Action _endCallback;
+    public Action EndCallback { get => _endCallback; set { _endCallback = value; } }
     protected Enemy _flockingEnemy;
     public Enemy FlockingEnemy
     {
@@ -77,6 +80,7 @@ public class Enemy : PoolableMono, IHittalble
 
         if(Health <= 0)
         {
+            _endCallback?.Invoke();
             PoolManager.Instance.Push(this);
         }
     }
@@ -91,6 +95,7 @@ public class Enemy : PoolableMono, IHittalble
         ChildAwake();
         id = Random.Range(0, 1000);
         StartCoroutine(DoFlocking());
+        _endCallback = DeConnectionFlokingEnemy;
     }
     protected virtual void ChildAwake()
     {
@@ -129,14 +134,10 @@ public class Enemy : PoolableMono, IHittalble
         foreach(Collider other in neighbourhood)
         {
             Enemy en = other.GetComponent<Enemy>();
-            if(en.FlockingEnemy==null)
+            if(en.FlockingEnemy==null|| en.FlockingEnemy != this)
             {
                 FlockingEnemy = en;
-                break;
-            }
-            if(en.FlockingEnemy!=this)
-            {
-                FlockingEnemy = en;
+                FlockingEnemy.EndCallback = DeConnectionFlokingEnemy;
                 break;
             }
         }
@@ -146,6 +147,7 @@ public class Enemy : PoolableMono, IHittalble
     {
         if(_flockingEnemy.FlockingEnemy == this)
         {
+            FlockingEnemy.EndCallback -= DeConnectionFlokingEnemy;
             IsHead = true;
         }
     }
@@ -153,6 +155,12 @@ public class Enemy : PoolableMono, IHittalble
     {
         float offset = (Random.value - Random.value) / spread;
         return (1 / flockUpdatesPerSecond) + offset;
+    }
+    protected void DeConnectionFlokingEnemy()
+    {
+        _flockingEnemy = null;
+        _isFlockingEnemy = false;
+        _isHead = false;
     }
 
     protected virtual void Move()
@@ -178,6 +186,7 @@ public class Enemy : PoolableMono, IHittalble
             Debug.Log("Player Hit");
             _isSelfDestruct = true;
             StartCoroutine(ExplosionEnemy());
+            _endCallback?.Invoke();
         }
     }
 
@@ -207,6 +216,7 @@ public class Enemy : PoolableMono, IHittalble
 
     private void OnDisable()
     {
+        _endCallback?.Invoke();
         StopAllCoroutines();
     }
     public override void Reset()
@@ -214,6 +224,7 @@ public class Enemy : PoolableMono, IHittalble
         Health = _enemyDataSO.health;
         _meshRenderer.material.color = Color.white;
         _isSelfDestruct = false;
+        DeConnectionFlokingEnemy();
     }
 
 #if UNITY_EDITOR
