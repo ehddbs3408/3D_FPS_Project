@@ -80,6 +80,7 @@ public class Enemy : PoolableMono, IHittalble
 
         if(Health <= 0)
         {
+
             _endCallback?.Invoke();
             PoolManager.Instance.Push(this);
         }
@@ -94,8 +95,8 @@ public class Enemy : PoolableMono, IHittalble
         _meshRenderer = GetComponent<MeshRenderer>();
         ChildAwake();
         id = Random.Range(0, 1000);
-        StartCoroutine(DoFlocking());
-        _endCallback = DeConnectionFlokingEnemy;
+        //StartCoroutine(DoFlocking());
+        //_endCallback = DeConnectionFlokingEnemy;
     }
     protected virtual void ChildAwake()
     {
@@ -113,68 +114,62 @@ public class Enemy : PoolableMono, IHittalble
         //
     }
 
-    protected virtual IEnumerator DoFlocking()
-    {
-        LayerMask layer = LayerMask.GetMask("Enemy");
-        while (true)
-        {
-            if (_isFlockingEnemy||_isHead) 
-            {
-                yield return null;
-                continue;
-            }
-            neighbourhood = Physics.OverlapSphere(transform.position, sightRadius, layer);
-            yield return new WaitForSeconds(SpreadUpdates());
-            DoSeparationAndCohesion();
-            yield return new WaitForSeconds(SpreadUpdates());
-        }
-    }
-    protected void DoSeparationAndCohesion()
-    {
-        foreach(Collider other in neighbourhood)
-        {
-            Enemy en = other.GetComponent<Enemy>();
-            if(en.FlockingEnemy==null|| en.FlockingEnemy != this)
-            {
-                FlockingEnemy = en;
-                FlockingEnemy.EndCallback = DeConnectionFlokingEnemy;
-                break;
-            }
-        }
-        EachOtherFlockingCheck();
-    }
-    protected void EachOtherFlockingCheck()
-    {
-        if(_flockingEnemy.FlockingEnemy == this)
-        {
-            FlockingEnemy.EndCallback -= DeConnectionFlokingEnemy;
-            IsHead = true;
-        }
-    }
-    protected float SpreadUpdates()
-    {
-        float offset = (Random.value - Random.value) / spread;
-        return (1 / flockUpdatesPerSecond) + offset;
-    }
-    protected void DeConnectionFlokingEnemy()
-    {
-        _flockingEnemy = null;
-        _isFlockingEnemy = false;
-        _isHead = false;
-    }
+    //protected virtual IEnumerator DoFlocking()
+    //{
+    //    LayerMask layer = LayerMask.GetMask("Enemy");
+    //    while (true)
+    //    {
+    //        if (_isFlockingEnemy||_isHead) 
+    //        {
+    //            yield return null;
+    //            continue;
+    //        }
+    //        neighbourhood = Physics.OverlapSphere(transform.position, sightRadius, layer);
+    //        yield return new WaitForSeconds(SpreadUpdates());
+    //        DoSeparationAndCohesion();
+    //        yield return new WaitForSeconds(SpreadUpdates());
+    //    }
+    //}
+    //protected void DoSeparationAndCohesion()
+    //{
+    //    foreach(Collider other in neighbourhood)
+    //    {
+    //        Enemy en = other.GetComponent<Enemy>();
+    //        if(en.FlockingEnemy==null|| en.FlockingEnemy != this)
+    //        {
+    //            FlockingEnemy = en;
+    //            FlockingEnemy.EndCallback = DeConnectionFlokingEnemy;
+    //            break;
+    //        }
+    //    }
+    //    EachOtherFlockingCheck();
+    //}
+    //protected void EachOtherFlockingCheck()
+    //{
+    //    if(_flockingEnemy.FlockingEnemy == this)
+    //    {
+    //        FlockingEnemy.EndCallback -= DeConnectionFlokingEnemy;
+    //        IsHead = true;
+    //    }
+    //}
+    //protected float SpreadUpdates()
+    //{
+    //    float offset = (Random.value - Random.value) / spread;
+    //    return (1 / flockUpdatesPerSecond) + offset;
+    //}
+    //protected void DeConnectionFlokingEnemy()
+    //{
+    //    _flockingEnemy = null;
+    //    _isFlockingEnemy = false;
+    //    _isHead = false;
+    //}
 
     protected virtual void Move()
     {
         if (_isSelfDestruct) return;
-        if (_isFlockingEnemy)
-        {
-            _direction = _flockingEnemy.Direction;
-            Debug.Log("asd");
-        }
-        else
-        {
-            _direction = _targetTrm.position - transform.position;
-        }
+
+        
+        _direction = _targetTrm.position - transform.position;
 
         _direction.Normalize();
         transform.Translate(_direction * _enemyDataSO.speed*Time.deltaTime);
@@ -224,7 +219,7 @@ public class Enemy : PoolableMono, IHittalble
         Health = _enemyDataSO.health;
         _meshRenderer.material.color = Color.white;
         _isSelfDestruct = false;
-        DeConnectionFlokingEnemy();
+        //DeConnectionFlokingEnemy();
     }
 
 #if UNITY_EDITOR
