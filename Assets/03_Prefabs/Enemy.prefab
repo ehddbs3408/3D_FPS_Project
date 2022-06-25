@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5107537100744982958}
   - component: {fileID: 5107537100744982962}
   - component: {fileID: 5107537100744982963}
+  - component: {fileID: 7800487703247957744}
   m_Layer: 7
   m_Name: Enemy
   m_TagString: Enemy
@@ -129,3 +130,19 @@ MonoBehaviour:
   spread: 5
   flockUpdatesPerSecond: 5
   sightRadius: 10
+--- !u!114 &7800487703247957744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5107537100744982957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 414dc6ce7049eaa42b47e92e63ceb47d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _dropTable: {fileID: 11400000, guid: 61e3a5d8d71eaca479971ee58ddfcf9a, type: 2}
+  _dropEffect: 0
+  _dropPower: 3
+  _dropChance: 1

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.Events;
 
 public class Weapon : MonoBehaviour
 {
@@ -13,10 +14,32 @@ public class Weapon : MonoBehaviour
     [SerializeField]
     private GameObject _bulletPrefab;
 
+    private AudioSource _audioSource;
+
     private Animator _animator;
     private readonly int _aimHashStr = Animator.StringToHash("IsAim");
     private readonly int _reloadHashStr = Animator.StringToHash("Reload");
     private readonly int _walkHashStr = Animator.StringToHash("Walk");
+
+    [field:SerializeField]
+    public UnityEvent<int,int> OnChangeTotalAmmo { get; set; }
+    [field: SerializeField]
+    public UnityEvent<int> OnChangeAmmo { get; set; }
+
+    #region Ammo
+    [SerializeField]
+    private int _maxTotalAmmo = 90;
+    [SerializeField]
+    private int _totalAmmo;
+    public int TotalAmmo
+    {
+        get => _totalAmmo;
+        set
+        {
+            _totalAmmo = Mathf.Clamp(value, 0, _maxTotalAmmo);
+            OnChangeTotalAmmo?.Invoke(_totalAmmo, _maxTotalAmmo);
+        }
+    }
 
     private int _ammo;
     public int Ammo
@@ -25,8 +48,14 @@ public class Weapon : MonoBehaviour
         set
         {
             _ammo = Mathf.Clamp(value, 0, _weaponDataSO.maxAmmo);
+            OnChangeAmmo?.Invoke(_ammo);
         }
     }
+
+    public int EmptyBulletCnt { get => _weaponDataSO.maxAmmo - _ammo; }
+    #endregion
+
+
 
     private Vector3 _currentVec;
 
@@ -46,6 +75,7 @@ public class Weapon : MonoBehaviour
     private void Awake()
     {
         _animator = GetComponent<Animator>();
+        _audioSource = GetComponent<AudioSource>();
         _currentVec = transform.localPosition;
         Ammo = _weaponDataSO.maxAmmo;
     }
@@ -61,7 +91,10 @@ public class Weapon : MonoBehaviour
             }
             else
             {
-                Ammo--;             
+                Ammo--;
+
+                PlayClip(_weaponDataSO.shootingClip);
+
                 Bullet bullet = PoolManager.Instance.Pop("bullet") as Bullet;
                 bullet.transform.position = _fireTrm.position;
                 bullet.gameObject.SetActive(true);
@@ -80,6 +113,12 @@ public class Weapon : MonoBehaviour
     {
         yield return new WaitForSeconds(waitTime);
         _isFire = false;
+    }
+    private void PlayClip(AudioClip clip)
+    {
+        _audioSource.Stop();
+        _audioSource.clip = clip;
+        _audioSource.Play();
     }
 
     public void AimWaepon(bool value)
@@ -113,17 +152,19 @@ public class Weapon : MonoBehaviour
         if (_isReload) return;
         _isRecoil = true;
         _isReload = true;
-        Ammo = _weaponDataSO.maxAmmo;
+
+        
         _animator.SetTrigger(_reloadHashStr);
 
     }
     public void ReloadToEnd()
     {
+        int reloadedAmmo = Mathf.Min(TotalAmmo, EmptyBulletCnt);
+
+        TotalAmmo -= reloadedAmmo;
+        Ammo += reloadedAmmo;
+
         _isReload = false;
         _isRecoil = false;
-    }
-    private void WeaponRecoil()
-    {
-
     }
 }

@@ -20,6 +20,7 @@ public class Enemy : PoolableMono, IHittalble
 
     protected Collider[] neighbourhood = null;
     protected MeshRenderer _meshRenderer;
+    private ItemDropper _itemDropper;
 
 
     protected Vector3 _direction = Vector3.zero;
@@ -82,6 +83,7 @@ public class Enemy : PoolableMono, IHittalble
         {
 
             _endCallback?.Invoke();
+            _itemDropper.DropItem();
             PoolManager.Instance.Push(this);
         }
     }
@@ -93,8 +95,10 @@ public class Enemy : PoolableMono, IHittalble
     {
         Health = _enemyDataSO.health;
         _meshRenderer = GetComponent<MeshRenderer>();
+        _itemDropper = GetComponent<ItemDropper>();
         ChildAwake();
-        id = Random.Range(0, 1000);
+
+
         //StartCoroutine(DoFlocking());
         //_endCallback = DeConnectionFlokingEnemy;
     }

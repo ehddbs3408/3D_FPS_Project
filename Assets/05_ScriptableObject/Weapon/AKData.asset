@@ -16,5 +16,7 @@ MonoBehaviour:
   aimRate: 0.4
   recoil: 3
   maxAmmo: 45
+  shootingClip: {fileID: 8300000, guid: 6739c01659ad96d47987f4ddee226b36, type: 3}
+  reloadClip: {fileID: 0}
   noAmmoClip: {fileID: 0}
   muzzleImpact: {fileID: 1000010254994808, guid: 9defeac88977c0d448aa4541073ee9e4, type: 3}

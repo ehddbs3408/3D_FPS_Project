@@ -11,6 +11,8 @@ public class WeaponDataSO : ScriptableObject
 
     public int maxAmmo;
 
+    public AudioClip shootingClip;
+    public AudioClip reloadClip;
     public AudioClip noAmmoClip;
 
     public GameObject muzzleImpact;
