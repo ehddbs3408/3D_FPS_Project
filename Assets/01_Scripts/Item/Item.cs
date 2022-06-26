@@ -30,7 +30,6 @@ public class Item : PoolableMono
         _collider.enabled = false;
         _meshRenderer.enabled = false;
         _childCollider.enabled = false;
-        Debug.Log(_childCollider.gameObject.name);
         _audioSource.Play();
         yield return new WaitForSeconds(_audioSource.clip.length + 0.3f);
         PoolManager.Instance.Push(this);

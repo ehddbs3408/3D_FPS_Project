@@ -17,6 +17,8 @@ public class Enemy : PoolableMono, IHittalble
 
     [SerializeField]
     protected float sightRadius = 10f;
+    [SerializeField]
+    protected float explosionRadius = 10f;
 
     protected Collider[] neighbourhood = null;
     protected MeshRenderer _meshRenderer;
@@ -82,7 +84,9 @@ public class Enemy : PoolableMono, IHittalble
 
         if(Health <= 0)
         {
-            StartCoroutine(DeadEnemy());
+            _endCallback?.Invoke();
+            _itemDropper.DropItem();
+            PoolManager.Instance.Push(this);
         }
     }
     #endregion
@@ -188,10 +192,19 @@ public class Enemy : PoolableMono, IHittalble
     {
         if(other.CompareTag("Player")&&_isSelfDestruct==false)
         {
-            Debug.Log("Player Hit");
             _isSelfDestruct = true;
             StartCoroutine(ExplosionEnemy());
             _endCallback?.Invoke();
+        }
+    }
+
+    private void CheckedExplosion()
+    {
+        Collider[] col = Physics.OverlapSphere(transform.position, explosionRadius,LayerMask.GetMask("Player"));
+        if(col.Length > 0)
+        {
+            IHittalble hittalble = col[0].GetComponent<IHittalble>();
+            hittalble?.GetHit(1, gameObject);
         }
     }
 
@@ -205,22 +218,16 @@ public class Enemy : PoolableMono, IHittalble
         yield return new WaitForSeconds(0.2f);
         _meshRenderer.material.color = Color.white;
         yield return new WaitForSeconds(0.2f);
+        
         ImpactParticle impact = PoolManager.Instance.Pop(_enemyDataSO.explosionImpact.name) as ImpactParticle;
         impact.transform.position = transform.position;
         PlayClip(_enemyDataSO.explosionClip);
-        yield return new WaitForSeconds(_enemyDataSO.explosionClip.length + 0.3f);
+
+        yield return new WaitForSeconds(_enemyDataSO.explosionClip.length/4);
+        CheckedExplosion();
+        yield return new WaitForSeconds(_enemyDataSO.explosionClip.length / 2);
         PoolManager.Instance.Push(this);
 
-    }
-    private IEnumerator DeadEnemy()
-    {
-        PlayClip(_enemyDataSO.deadClip);
-        _isSelfDestruct = true;
-        _meshRenderer.material.color = Color.black;
-        yield return new WaitForSeconds(_enemyDataSO.deadClip.length + 0.1f);
-        _endCallback?.Invoke();
-        _itemDropper.DropItem();
-        PoolManager.Instance.Push(this);
     }
 
     protected IEnumerator WaitForTimeAttack()
@@ -250,7 +257,7 @@ public class Enemy : PoolableMono, IHittalble
         {
             Gizmos.color = Color.green;
             //Gizmos.DrawSphere(transform.position, sightRadius);
-            Gizmos.DrawWireSphere(transform.position, sightRadius);
+            Gizmos.DrawWireSphere(transform.position, explosionRadius);
             Gizmos.color = Color.white;
         }
     }

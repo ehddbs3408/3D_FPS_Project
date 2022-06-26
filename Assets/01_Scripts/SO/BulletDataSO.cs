@@ -8,5 +8,7 @@ public class BulletDataSO : ScriptableObject
     public float speed;
     public int damage;
 
+    public AudioClip hitClip;
+
     public GameObject impactPrefab;
 }

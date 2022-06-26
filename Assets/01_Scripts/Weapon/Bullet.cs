@@ -9,12 +9,14 @@ public class Bullet : PoolableMono
     private BulletDataSO _bulletDataSO;
 
     private TrailRenderer _trailRenderer;
+    private AudioSource _audioSource;
 
     private Vector3 _directionMove = Vector3.forward;
 
     private void Awake()
     {
         _trailRenderer = GetComponent<TrailRenderer>();
+        _audioSource = GetComponent<AudioSource>();
     }
     private void OnEnable()
     {
@@ -34,21 +36,30 @@ public class Bullet : PoolableMono
         _trailRenderer.enabled = true;
         _directionMove = Camera.main.transform.TransformDirection(Vector3.forward);
     }
-
+    private void PlayClip(AudioClip clip)
+    {
+        _audioSource.Stop();
+        _audioSource.clip = clip;
+        _audioSource.Play();
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Enemy"))
         {
-            IHittalble hit = other.GetComponent<IHittalble>();
-            hit.GetHit(1, gameObject);
-
-            ImpactParticle impact = PoolManager.Instance.Pop(_bulletDataSO.impactPrefab.name) as ImpactParticle;
-            impact.transform.position = transform.position;
-
-            PoolManager.Instance.Push(this);
+            StartCoroutine(HitBullet(other));
         }
     }
+    private IEnumerator HitBullet(Collider other)
+    {
+        PlayClip(_bulletDataSO.hitClip);
+        IHittalble hit = other.GetComponent<IHittalble>();
+        hit.GetHit(1, gameObject);
 
+        ImpactParticle impact = PoolManager.Instance.Pop(_bulletDataSO.impactPrefab.name) as ImpactParticle;
+        impact.transform.position = transform.position;
+        yield return new WaitForSeconds(_bulletDataSO.hitClip.length+0.1f);
+        PoolManager.Instance.Push(this);
+    }
     private IEnumerator BulletLifeTimeCoroutine()
     {
         yield return new WaitForSeconds(5);

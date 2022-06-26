@@ -16,5 +16,5 @@ MonoBehaviour:
   health: 2
   attackDelay: 0.5
   deadClip: {fileID: 8300000, guid: 0bd05763df902854a80475577a26666a, type: 3}
-  explosionClip: {fileID: 8300000, guid: 19f89c6e740e7447f9e12a8310d3e973, type: 3}
+  explosionClip: {fileID: 8300000, guid: ff5f85da24bc943d1abdc5760a22bc81, type: 3}
   explosionImpact: {fileID: 8746206903446403329, guid: 7300cabdd7769584387ed2d4b24773fd, type: 3}

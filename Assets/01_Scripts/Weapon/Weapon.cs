@@ -77,6 +77,10 @@ public class Weapon : MonoBehaviour
         _animator = GetComponent<Animator>();
         _audioSource = GetComponent<AudioSource>();
         _currentVec = transform.localPosition;
+        
+    }
+    private void Start()
+    {
         Ammo = _weaponDataSO.maxAmmo;
     }
     public void Fire()

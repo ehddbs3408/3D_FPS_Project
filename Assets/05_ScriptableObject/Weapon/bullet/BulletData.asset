@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 70
   damage: 1
+  hitClip: {fileID: 8300000, guid: a37f44cbf8c2a7443a3c361efa2f233a, type: 3}
   impactPrefab: {fileID: 3371290192814205269, guid: 5f92e4c17a64d4e4a8147157a723afd6, type: 3}
