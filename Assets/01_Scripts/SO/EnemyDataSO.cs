@@ -10,6 +10,9 @@ public class EnemyDataSO : ScriptableObject
 
     public float attackDelay = 0.5f;
 
+    public AudioClip deadClip;
+    public AudioClip explosionClip;
+
     public GameObject explosionImpact;
 
 }

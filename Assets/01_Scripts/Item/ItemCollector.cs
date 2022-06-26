@@ -21,7 +21,6 @@ public class ItemCollector : MonoBehaviour
 
         if (other.gameObject.layer == _resourceLayer)
         {
-            Debug.Log("GEt");
             Item item = other.GetComponent<Item>();
             if (item != null)
             {

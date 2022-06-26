@@ -9,6 +9,7 @@ public class Item : PoolableMono
 
     private AudioSource _audioSource;
     private Collider _collider;
+    private Collider _childCollider;
     private MeshRenderer _meshRenderer;
 
     private void Awake()
@@ -17,6 +18,7 @@ public class Item : PoolableMono
         _audioSource.clip = ItemDataSO.useAudio;
         _collider = GetComponent<Collider>();
         _meshRenderer = GetComponent<MeshRenderer>();
+        _childCollider = transform.Find("Col").GetComponent<Collider>();
     }
     public void PickUpResource()
     {
@@ -27,6 +29,8 @@ public class Item : PoolableMono
     {
         _collider.enabled = false;
         _meshRenderer.enabled = false;
+        _childCollider.enabled = false;
+        Debug.Log(_childCollider.gameObject.name);
         _audioSource.Play();
         yield return new WaitForSeconds(_audioSource.clip.length + 0.3f);
         PoolManager.Instance.Push(this);
@@ -41,5 +45,6 @@ public class Item : PoolableMono
     {
         _meshRenderer.enabled = true;
         _collider.enabled = true;
+        _childCollider.enabled = true;
     }
 }

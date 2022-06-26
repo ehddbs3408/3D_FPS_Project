@@ -36,13 +36,6 @@ public class ItemDropper : MonoBehaviour
 
             resource.transform.position = transform.position;
 
-            //Action destroyAction = null;
-            //destroyAction = () =>
-            //{
-            //    resource.DestroyResource();
-            //    GameManager.Instance.OnClearAllDropItems -= destroyAction;
-            //};
-            //GameManager.Instance.OnClearAllDropItems += destroyAction;
 
             if (_dropEffect)
             {

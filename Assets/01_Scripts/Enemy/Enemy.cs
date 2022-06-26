@@ -20,6 +20,7 @@ public class Enemy : PoolableMono, IHittalble
 
     protected Collider[] neighbourhood = null;
     protected MeshRenderer _meshRenderer;
+    protected AudioSource _audioSource;
     private ItemDropper _itemDropper;
 
 
@@ -81,10 +82,7 @@ public class Enemy : PoolableMono, IHittalble
 
         if(Health <= 0)
         {
-
-            _endCallback?.Invoke();
-            _itemDropper.DropItem();
-            PoolManager.Instance.Push(this);
+            StartCoroutine(DeadEnemy());
         }
     }
     #endregion
@@ -96,6 +94,7 @@ public class Enemy : PoolableMono, IHittalble
         Health = _enemyDataSO.health;
         _meshRenderer = GetComponent<MeshRenderer>();
         _itemDropper = GetComponent<ItemDropper>();
+        _audioSource = GetComponent<AudioSource>();
         ChildAwake();
 
 
@@ -116,6 +115,13 @@ public class Enemy : PoolableMono, IHittalble
     protected virtual void Attack()
     {
         //
+    }
+
+    protected void PlayClip(AudioClip clip)
+    {
+        _audioSource.Stop();
+        _audioSource.clip = clip;
+        _audioSource.Play();
     }
 
     //protected virtual IEnumerator DoFlocking()
@@ -201,9 +207,20 @@ public class Enemy : PoolableMono, IHittalble
         yield return new WaitForSeconds(0.2f);
         ImpactParticle impact = PoolManager.Instance.Pop(_enemyDataSO.explosionImpact.name) as ImpactParticle;
         impact.transform.position = transform.position;
-        yield return new WaitForSeconds(0.3f);
+        PlayClip(_enemyDataSO.explosionClip);
+        yield return new WaitForSeconds(_enemyDataSO.explosionClip.length + 0.3f);
         PoolManager.Instance.Push(this);
 
+    }
+    private IEnumerator DeadEnemy()
+    {
+        PlayClip(_enemyDataSO.deadClip);
+        _isSelfDestruct = true;
+        _meshRenderer.material.color = Color.black;
+        yield return new WaitForSeconds(_enemyDataSO.deadClip.length + 0.1f);
+        _endCallback?.Invoke();
+        _itemDropper.DropItem();
+        PoolManager.Instance.Push(this);
     }
 
     protected IEnumerator WaitForTimeAttack()

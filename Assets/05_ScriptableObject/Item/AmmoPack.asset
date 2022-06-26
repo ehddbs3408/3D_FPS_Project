@@ -16,5 +16,5 @@ MonoBehaviour:
   itemPrefab: {fileID: 7145165998672086327, guid: 8a271fde7aad44b5a8ec8025c447c359, type: 3}
   itemType: 1
   minAmount: 1
-  maxAmount: 30
-  useAudio: {fileID: 8300000, guid: 626bc169dd1354130a697094492ee6fd, type: 3}
+  maxAmount: 10
+  useAudio: {fileID: 8300000, guid: 3becec1909f194046945d85ac1077772, type: 3}
