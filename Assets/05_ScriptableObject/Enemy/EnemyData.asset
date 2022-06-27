@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d11b848fd7c72845b4075cfa874583d, type: 3}
   m_Name: EnemyData
   m_EditorClassIdentifier: 
-  speed: 4
+  speed: 10
   health: 2
   attackDelay: 0.5
   deadClip: {fileID: 8300000, guid: 0bd05763df902854a80475577a26666a, type: 3}

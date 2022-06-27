@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour,IHittalble
 {
@@ -31,16 +32,20 @@ public class Player : MonoBehaviour,IHittalble
 
         if(Health<=0)
         {
+            SceneManager.LoadScene("GameOver");
             Debug.Log("Die");
         }
     }
 
     private void Awake()
     {
-        Health = maxHeatlh;
+        
         _weapon = GetComponentInChildren<Weapon>();
     }
-
+    private void Start()
+    {
+        Health = maxHeatlh;
+    }
 
 
 }
